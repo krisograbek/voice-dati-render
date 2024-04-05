@@ -1,13 +1,13 @@
 import os
+from io import BytesIO
+from openai import OpenAI
+from datetime import datetime
 from flask import Flask, request, jsonify, render_template, send_from_directory, url_for
 from flask_cors import CORS
-from chatbot_pipeline import ChatbotPipeline
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
-from io import BytesIO
-from datetime import datetime
 
-from openai import OpenAI
+from chatbot_pipeline_agent import ChatbotPipeline
 
 
 load_dotenv()
@@ -47,7 +47,7 @@ def upload_csv():
         filename = secure_filename(file.filename)
         filepath = os.path.join("/tmp", filename)
         file.save(filepath)
-        pipeline = ChatbotPipeline(csv_file=filepath, model=3)
+        pipeline = ChatbotPipeline(csv_file=filepath, model=4)
         return jsonify({"message": "File uploaded and pipeline initialized"}), 200
     else:
         return jsonify({"error": "Invalid file type"}), 400
@@ -62,11 +62,17 @@ def chat():
     print(f"User prompt: {user_prompt}")
 
     if pipeline and openai_api_key:
-        response = pipeline.run_full_chain(user_prompt)
+        response = pipeline.run_sql_agent(user_prompt)
+        # response = pipeline.run_full_chain(user_prompt)
         # Save user message and response
         messages.append({"role": "user", "content": user_prompt})
-        messages.append({"role": "assistant", "content": response})
-        return jsonify({"response": response, "messages": messages}), 200
+        messages.append(
+            {"role": "assistant", "content": response["output"]}
+        )  # remove ["output"] for chain
+        return (
+            jsonify({"response": response["output"], "messages": messages}),
+            200,
+        )  # remove ["output"] for chain
     else:
         return (
             jsonify({"error": "Pipeline not initialized or OpenAI API key missing."}),
@@ -119,10 +125,12 @@ def synthesize_audio():
     text = data["text"]
     print(f"Received text to synthesize: {text}")
 
+    text_to_synthesize = text if isinstance(text, str) else text["output"]
+
     audio = client.audio.speech.create(
         model="tts-1",
         voice="alloy",
-        input=text,
+        input=text_to_synthesize,  # remove ["output"] for chain
     )
 
     audio_filename = datetime.now().strftime("%Y%m%d_%H%M%S") + ".mp3"
