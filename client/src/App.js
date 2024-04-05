@@ -25,6 +25,7 @@ import {
   transcribeAudio,
   uploadFile
 } from './services/api';
+import AudioPlayerContainer from './components/styled/AudioPlayerContainer';
 
 // const host = process.env.NODE_ENV === 'development' ? "http://localhost:5000/" : "http://localhost:8000/";
 
@@ -141,10 +142,12 @@ function App() {
                 {msg.content}
               </MessageItem>
               {msg.audioUrl && (
-                <audio controls autoPlay>
-                  <source src={msg.audioUrl} type="audio/mpeg" />
-                  Your browser does not support the audio element.
-                </audio>
+                <AudioPlayerContainer>
+                  <audio controls autoPlay>
+                    <source src={msg.audioUrl} type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </AudioPlayerContainer>
               )}
             </React.Fragment>
           ))}

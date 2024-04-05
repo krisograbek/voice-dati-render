@@ -10,7 +10,7 @@ load_dotenv()
 
 
 class ChatbotPipeline:
-    def __init__(self, csv_file=None, db_name="dati", model=4):
+    def __init__(self, csv_file=None, db_name="orders", model=4):
         self.model_name = "gpt-3.5-turbo" if model == 3 else "gpt-4-0125-preview"
         self.engine = self.create_db_engine(csv_file, db_name)
         self.db = SQLDatabase(engine=self.engine)

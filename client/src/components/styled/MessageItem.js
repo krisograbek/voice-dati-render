@@ -9,6 +9,7 @@ const MessageItem = styled.div`
   align-self: ${({ isUser }) => (isUser ? 'flex-end' : 'flex-start')};
   background-color: ${({ isUser }) => (isUser ? '#d8eefe' : '#f1f1f1')};
   color: ${({ isUser, theme }) => (isUser ? theme.colors.primaryDark : '#495057')};
+  white-space: pre-wrap; // for new lines
 
   ${({ isUser }) =>
     isUser &&

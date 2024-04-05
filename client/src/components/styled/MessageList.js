@@ -7,6 +7,7 @@ const MessageList = styled.div`
   overflow-y: auto;
   padding: 10px;
   flex-grow: 1;
+  max-height: 90%; // Adjust as necessary
 `;
 
 export default MessageList;
