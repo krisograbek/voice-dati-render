@@ -1,8 +1,8 @@
-flask==3.0.2
-pandas==2.2.1
-langchain==0.1.12
-Flask-Cors==4.0.0.
-langchain-openai==0.0.8
+flask
+pandas
+langchain
+Flask-Cors
+langchain-openai
 python-dotenv
 sqlalchemy
-gunicorn==21.2.0
+gunicorn
