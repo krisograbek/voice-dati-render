@@ -1,8 +1,9 @@
-flask
 pandas
 langchain
-Flask-Cors
 langchain-openai
+langchain-community
 python-dotenv
 sqlalchemy
+Flask-Cors
 gunicorn
+flask
